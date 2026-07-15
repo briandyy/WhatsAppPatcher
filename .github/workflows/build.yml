@@ -28,13 +28,25 @@ jobs:
 
       - name: Build smali_generator (Gradle assembleRelease)
         working-directory: smali_generator
-        run: ./gradlew assembleRelease
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
+        run: |
+          # Create local.properties with sdk.dir
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          ./gradlew assembleRelease
+          # Copy result APK to known location for artifact upload
+          mkdir -p /tmp/artifacts
+          cp app/build/outputs/apk/release/app-release-unsigned.apk /tmp/artifacts/smali_generator.apk 2>/dev/null || \
+          cp app/build/outputs/apk/release/app-release.apk /tmp/artifacts/smali_generator.apk 2>/dev/null || \
+          cp $(find app/build/outputs/apk/release -name "*.apk" | head -1) /tmp/artifacts/smali_generator.apk || true
+          ls -la /tmp/artifacts/
 
       - name: Upload smali_generator APK
         uses: actions/upload-artifact@v4
         with:
           name: smali_generator_apk
-          path: smali_generator/smali_generator.apk
+          path: /tmp/artifacts/smali_generator.apk
+          if-no-files-found: warn
 
   patch-apk:
     name: Patch WhatsApp APK
