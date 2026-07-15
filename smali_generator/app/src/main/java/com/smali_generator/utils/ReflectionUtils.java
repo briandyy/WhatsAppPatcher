@@ -286,4 +286,62 @@ public class ReflectionUtils {
     public static Context getAppContext() {
         return sAppContext;
     }
+
+    /**
+     * Cari class berdasarkan nama lengkap (FQCN). Wrapper untuk Class.forName().
+     */
+    public static Class<?> findClass(String className) {
+        try {
+            return Class.forName(className);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Class not found: " + className, e);
+        }
+    }
+
+    /**
+     * Cari method berdasarkan nama dan tipe parameter.
+     */
+    public static Method findMethod(Class<?> clazz, String methodName, Class<?>... parameterTypes) {
+        try {
+            Method m = clazz.getDeclaredMethod(methodName, parameterTypes);
+            m.setAccessible(true);
+            return m;
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Method not found: " + methodName + " in " + clazz.getName(), e);
+        }
+    }
+
+    /**
+     * Cari field berdasarkan nama.
+     */
+    public static Field findField(Class<?> clazz, String fieldName) {
+        try {
+            Field f = clazz.getDeclaredField(fieldName);
+            f.setAccessible(true);
+            return f;
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException("Field not found: " + fieldName + " in " + clazz.getName(), e);
+        }
+    }
+
+    /**
+     * Ambil nilai field dari instance.
+     */
+    public static Object getFieldValue(Field field, Object instance) {
+        try {
+            return field.get(instance);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Set nilai field pada instance.
+     */
+    public static void setFieldValue(Field field, Object instance, Object value) {
+        try {
+            field.set(instance, value);
+        } catch (Exception ignored) {
+        }
+    }
 }
