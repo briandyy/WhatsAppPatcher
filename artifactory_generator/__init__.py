@@ -1,0 +1,1 @@
+# Artifactory generators untuk WhatsAppPatcherMod

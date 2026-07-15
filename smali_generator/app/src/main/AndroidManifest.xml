@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.smali_generator">
 
-    <application tools:ignore="MissingApplicationIcon" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
+    <application
+        android:label="WA Mod"
+        tools:ignore="MissingApplicationIcon">
+
+        <!-- Activity pengaturan mod, diakses via WhatsApp Settings menu injection -->
+        <activity
+            android:name=".settings.ModSettingsActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Material.Light.DarkActionBar"
+            android:excludeFromRecents="true"
+            android:taskAffinity="com.smali_generator.settings.task" />
+
+    </application>
 </manifest>
