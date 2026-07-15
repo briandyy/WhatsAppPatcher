@@ -42,8 +42,6 @@ public class TheAmazingPatch {
             ModSettings.init(context);
             Log.e(TAG, "ModSettings initialized");
 
-            // Register dynamic broadcast receiver for toggling features via adb:
-            // adb shell am broadcast -a com.smali_generator.TOGGLE --ez antiDelete false
             try {
                 context.registerReceiver(new BroadcastReceiver() {
                     @Override
@@ -51,24 +49,15 @@ public class TheAmazingPatch {
                         if (intent == null) return;
                         String action = intent.getAction();
                         if ("com.smali_generator.TOGGLE".equals(action)) {
-                            boolean antiDelete = intent.getBooleanExtra("antiDelete", ModSettings.isAntiDeleteOn());
-                            boolean antiDeleteStatus = intent.getBooleanExtra("antiDeleteStatus", ModSettings.isAntiDeleteStatusOn());
-                            boolean viewOnceStealth = intent.getBooleanExtra("viewOnceStealth", ModSettings.isViewOnceStealthOn());
-                            boolean viewOncePermanent = intent.getBooleanExtra("viewOncePermanent", ModSettings.isViewOncePermanentOn());
-                            boolean hideBlueTick = intent.getBooleanExtra("hideBlueTick", ModSettings.isHideBlueTickOn());
-                            boolean hideTyping = intent.getBooleanExtra("hideTyping", ModSettings.isHideTypingOn());
-                            boolean hideRecording = intent.getBooleanExtra("hideRecording", ModSettings.isHideRecordingOn());
-                            boolean groupStatus = intent.getBooleanExtra("groupStatus", ModSettings.isGroupStatusOn());
-                            boolean downloadStatus = intent.getBooleanExtra("downloadStatus", ModSettings.isDownloadStatusOn());
-                            ModSettings.setAntiDeleteOn(antiDelete);
-                            ModSettings.setAntiDeleteStatusOn(antiDeleteStatus);
-                            ModSettings.setViewOnceStealthOn(viewOnceStealth);
-                            ModSettings.setViewOncePermanentOn(viewOncePermanent);
-                            ModSettings.setHideBlueTickOn(hideBlueTick);
-                            ModSettings.setHideTypingOn(hideTyping);
-                            ModSettings.setHideRecordingOn(hideRecording);
-                            ModSettings.setGroupStatusOn(groupStatus);
-                            ModSettings.setDownloadStatusOn(downloadStatus);
+                            ModSettings.setEnabled(ModSettings.KEY_ANTI_DELETE_MSG, intent.getBooleanExtra("antiDelete", ModSettings.isAntiDeleteMsgEnabled()));
+                            ModSettings.setEnabled(ModSettings.KEY_ANTI_DELETE_STATUS, intent.getBooleanExtra("antiDeleteStatus", ModSettings.isAntiDeleteStatusEnabled()));
+                            ModSettings.setEnabled(ModSettings.KEY_VIEW_ONCE_STEALTH, intent.getBooleanExtra("viewOnceStealth", ModSettings.isViewOnceStealthEnabled()));
+                            ModSettings.setEnabled(ModSettings.KEY_VIEW_ONCE_PERMANENT, intent.getBooleanExtra("viewOncePermanent", ModSettings.isViewOncePermanentEnabled()));
+                            ModSettings.setEnabled(ModSettings.KEY_HIDE_BLUE_TICK, intent.getBooleanExtra("hideBlueTick", ModSettings.isHideBlueTickEnabled()));
+                            ModSettings.setEnabled(ModSettings.KEY_HIDE_TYPING, intent.getBooleanExtra("hideTyping", ModSettings.isHideTypingEnabled()));
+                            ModSettings.setEnabled(ModSettings.KEY_HIDE_RECORDING, intent.getBooleanExtra("hideRecording", ModSettings.isHideRecordingEnabled()));
+                            ModSettings.setEnabled(ModSettings.KEY_GROUP_STATUS, intent.getBooleanExtra("groupStatus", ModSettings.isGroupStatusEnabled()));
+                            ModSettings.setEnabled(ModSettings.KEY_DOWNLOAD_STATUS, intent.getBooleanExtra("downloadStatus", ModSettings.isDownloadStatusEnabled()));
                             Log.e(TAG, "Toggles updated via broadcast");
                         }
                     }
